@@ -55,7 +55,10 @@ export const BANNER_PRESETS: BannerPreset[] = [
 /** Selecting this is not a ratio/locked preset; size starts at wiki and both sides are free. */
 export const CLEAR_PRESET_ID = "clear";
 
-export const DEFAULT_PRESET_ID = "wiki";
+/** Fixed-size wiki banner; dimensions are not user-editable in the UI. */
+export const WIKI_PRESET_ID = "wiki";
+
+export const DEFAULT_PRESET_ID = WIKI_PRESET_ID;
 
 export const DIMENSION_LIMITS = { min: 100, max: 4096 } as const;
 

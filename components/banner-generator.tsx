@@ -14,6 +14,7 @@ import {
   DIMENSION_LIMITS,
   heightFromWidth,
   widthFromHeight,
+  WIKI_PRESET_ID,
   type BannerPreset,
 } from "@/lib/banner-presets";
 import type { BannerThemeId } from "@/lib/banner-theme";
@@ -94,6 +95,8 @@ export function BannerGenerator() {
   const [busy, setBusy] = useState(false);
 
   const captureRef = useRef<HTMLDivElement>(null);
+
+  const isWikiHeaderPreset = presetId === WIKI_PRESET_ID;
 
   const activeColors = bannerThemes[theme];
 
@@ -275,7 +278,7 @@ export function BannerGenerator() {
                 onClick={() => setTheme(id)}
                 className={`min-w-0 flex-1 px-3 py-2 text-center text-xs font-bold uppercase leading-normal transition-colors sm:flex-none sm:px-4 sm:text-sm ${
                   theme === id
-                    ? "relative z-[1] border-[#27348B] bg-[#27348B]/5 text-[#27348B]"
+                    ? "relative z-[1] border-[#BFE2FF] bg-[#E3F2FF] text-[#0084F2]"
                     : i > 0
                       ? "border-l border-zinc-200 bg-white text-[#27348B] hover:bg-zinc-50"
                       : "bg-white text-[#27348B] hover:bg-zinc-50"
@@ -336,7 +339,8 @@ export function BannerGenerator() {
                   value={draftW}
                   onChange={(e) => setDraftW(e.target.value)}
                   onBlur={onWidthBlur}
-                  className={fieldClass}
+                  disabled={isWikiHeaderPreset}
+                  className={`${fieldClass} disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-[#27348B]/60`}
                 />
               </label>
               <label className={labelClass} style={{ color: LABELMuted }}>
@@ -346,7 +350,8 @@ export function BannerGenerator() {
                   value={draftH}
                   onChange={(e) => setDraftH(e.target.value)}
                   onBlur={onHeightBlur}
-                  className={fieldClass}
+                  disabled={isWikiHeaderPreset}
+                  className={`${fieldClass} disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-[#27348B]/60`}
                 />
               </label>
             </div>
@@ -359,10 +364,10 @@ export function BannerGenerator() {
                   key={p.id}
                   type="button"
                   onClick={() => applyPreset(p)}
-                  className={`cursor-pointer rounded-full border px-3 py-1.5 text-left text-sm font-normal leading-normal text-[#27348B] transition-colors ${
+                  className={`cursor-pointer rounded-[4px] border px-3 py-1.5 text-left text-sm font-normal leading-normal transition-colors ${
                     presetId === p.id
-                      ? "border-[#27348B] bg-[#27348B]/10 font-semibold"
-                      : "border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50"
+                      ? "border-[#BFE2FF] bg-[#E3F2FF] font-semibold text-[#0084F2]"
+                      : "border-zinc-200 bg-white text-[#27348B] hover:border-zinc-300 hover:bg-zinc-50"
                   }`}
                 >
                   {p.label}
@@ -371,19 +376,21 @@ export function BannerGenerator() {
               <button
                 type="button"
                 onClick={clearPreset}
-                className={`cursor-pointer rounded-full border px-3 py-1.5 text-left text-sm font-normal leading-normal text-[#27348B] transition-colors ${
+                className={`cursor-pointer rounded-[4px] border px-3 py-1.5 text-left text-sm font-normal leading-normal transition-colors ${
                   presetId === CLEAR_PRESET_ID
-                    ? "border-[#27348B] bg-[#27348B]/10 font-semibold"
-                    : "border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50"
+                    ? "border-[#BFE2FF] bg-[#E3F2FF] font-semibold text-[#0084F2]"
+                    : "border-zinc-200 bg-white text-[#27348B] hover:border-zinc-300 hover:bg-zinc-50"
                 }`}
               >
                 No preset
               </button>
             </div>
             <p className="mt-2 text-base font-normal leading-normal" style={{ color: LSW }}>
-              {aspectLock
-                ? `Aspect locked to ${aspectLock.rw}∶${aspectLock.rh}. Edit one side to scale the other.`
-                : `Free sizing. Values are clamped to ${DIMENSION_LIMITS.min}–${DIMENSION_LIMITS.max}px.`}
+              {isWikiHeaderPreset
+                ? `Wiki header is fixed at ${width}×${height}px.`
+                : aspectLock
+                  ? `Aspect locked to ${aspectLock.rw}∶${aspectLock.rh}. Edit one side to scale the other.`
+                  : `Free sizing. Values are clamped to ${DIMENSION_LIMITS.min}–${DIMENSION_LIMITS.max}px.`}
             </p>
           </div>
 
