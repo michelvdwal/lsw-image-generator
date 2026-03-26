@@ -1,6 +1,11 @@
 "use client";
 
-import { forwardRef } from "react";
+import { forwardRef, useMemo } from "react";
+import {
+  type RatioLayoutDesign,
+  type RatioLayoutReference,
+  RATIO_LAYOUT_DESIGN_2_3,
+} from "@/lib/banner-presets";
 import type { BannerThemeId } from "@/lib/banner-theme";
 import { bannerThemes } from "@/lib/banner-theme";
 
@@ -10,6 +15,13 @@ export type BannerPreviewProps = {
   theme: BannerThemeId;
   headline: string;
   subheading: string;
+  /**
+   * When set, padding and type scale from this reference export size (geometric mean of
+   * width and height scale vs ref).
+   */
+  ratioLayoutRef?: RatioLayoutReference | null;
+  /** Typography tokens at ref size; defaults to ratio-preset tokens when omitted. */
+  ratioLayoutDesign?: RatioLayoutDesign | null;
 };
 
 /** Figma node 8219:21523 — uppercase subheading tracking (4.8px at 20px type). */
@@ -28,15 +40,56 @@ const SUB_LINE_PX = 24;
 
 export const BannerPreview = forwardRef<HTMLDivElement, BannerPreviewProps>(
   function BannerPreview(
-    { width, height, theme, headline, subheading },
+    {
+      width,
+      height,
+      theme,
+      headline,
+      subheading,
+      ratioLayoutRef: ratioRef,
+      ratioLayoutDesign,
+    },
     ref,
   ) {
     const colors = bannerThemes[theme];
-    const minDim = Math.min(width, height);
-    const pad = Math.min(
-      BANNER_PAD_TARGET,
-      Math.max(8, Math.floor(minDim / 2) - 40),
-    );
+
+    const layout = useMemo(() => {
+      if (
+        ratioRef != null &&
+        ratioRef.width > 0 &&
+        ratioRef.height > 0
+      ) {
+        const sx = width / ratioRef.width;
+        const sy = height / ratioRef.height;
+        const s = Math.sqrt(Math.max(1e-12, sx * sy));
+        const q = (v: number, floor = 1) =>
+          Math.max(floor, Math.round(v * s));
+        const d = ratioLayoutDesign ?? RATIO_LAYOUT_DESIGN_2_3;
+        return {
+          pad: q(d.padding, 8),
+          gap: q(d.stackGap, 4),
+          headlineFont: q(d.headlineFont, 8),
+          headlineLine: q(d.headlineLine, 9),
+          subFont: q(d.subFont, 6),
+          subLine: q(d.subLine, 8),
+          subLetterSpacing: "0.24em",
+        };
+      }
+      const minDim = Math.min(width, height);
+      const pad = Math.min(
+        BANNER_PAD_TARGET,
+        Math.max(8, Math.floor(minDim / 2) - 40),
+      );
+      return {
+        pad,
+        gap: BANNER_STACK_GAP,
+        headlineFont: HEADLINE_PX,
+        headlineLine: HEADLINE_LINE_PX,
+        subFont: SUB_PX,
+        subLine: SUB_LINE_PX,
+        subLetterSpacing: BANNER_CAPS_LETTER_SPACING,
+      };
+    }, [width, height, ratioRef, ratioLayoutDesign]);
 
     return (
       <div
@@ -52,8 +105,8 @@ export const BannerPreview = forwardRef<HTMLDivElement, BannerPreviewProps>(
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "flex-start",
-          gap: BANNER_STACK_GAP,
-          padding: pad,
+          gap: layout.gap,
+          padding: layout.pad,
           fontFamily: "var(--font-outfit), ui-sans-serif, system-ui, sans-serif",
         }}
       >
@@ -61,8 +114,8 @@ export const BannerPreview = forwardRef<HTMLDivElement, BannerPreviewProps>(
           style={{
             margin: 0,
             fontWeight: 800,
-            fontSize: HEADLINE_PX,
-            lineHeight: `${HEADLINE_LINE_PX}px`,
+            fontSize: layout.headlineFont,
+            lineHeight: `${layout.headlineLine}px`,
           }}
         >
           {headline}
@@ -71,10 +124,10 @@ export const BannerPreview = forwardRef<HTMLDivElement, BannerPreviewProps>(
           style={{
             margin: 0,
             fontWeight: 700,
-            fontSize: SUB_PX,
-            lineHeight: `${SUB_LINE_PX}px`,
+            fontSize: layout.subFont,
+            lineHeight: `${layout.subLine}px`,
             textTransform: "uppercase",
-            letterSpacing: BANNER_CAPS_LETTER_SPACING,
+            letterSpacing: layout.subLetterSpacing,
             maxWidth: "100%",
           }}
         >

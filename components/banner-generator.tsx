@@ -9,10 +9,14 @@ import {
 import {
   BANNER_PRESETS,
   CLEAR_PRESET_ID,
+  CLEAR_PRESET_REF_HEIGHT,
+  CLEAR_PRESET_REF_WIDTH,
   CUSTOM_PRESET_ID,
   DEFAULT_PRESET_ID,
   DIMENSION_LIMITS,
   heightFromWidth,
+  ratioLayoutDesignForPreset,
+  ratioLayoutReferenceForPreset,
   widthFromHeight,
   WIKI_PRESET_ID,
   type BannerPreset,
@@ -97,6 +101,14 @@ export function BannerGenerator() {
   const captureRef = useRef<HTMLDivElement>(null);
 
   const isWikiHeaderPreset = presetId === WIKI_PRESET_ID;
+  const ratioLayoutRef = useMemo(
+    () => ratioLayoutReferenceForPreset(presetId),
+    [presetId],
+  );
+  const ratioLayoutDesign = useMemo(
+    () => ratioLayoutDesignForPreset(presetId),
+    [presetId],
+  );
 
   const activeColors = bannerThemes[theme];
 
@@ -144,8 +156,8 @@ export function BannerGenerator() {
 
   const clearPreset = useCallback(() => {
     setAspectLock(null);
-    const w = clampSize(1300);
-    const h = clampSize(370);
+    const w = clampSize(CLEAR_PRESET_REF_WIDTH);
+    const h = clampSize(CLEAR_PRESET_REF_HEIGHT);
     setWidth(w);
     setHeight(h);
     syncDrafts(w, h);
@@ -313,6 +325,8 @@ export function BannerGenerator() {
                 theme={theme}
                 headline={headline}
                 subheading={subheading}
+                ratioLayoutRef={ratioLayoutRef}
+                ratioLayoutDesign={ratioLayoutDesign}
               />
             </div>
           </div>
