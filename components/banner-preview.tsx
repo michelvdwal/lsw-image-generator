@@ -123,6 +123,7 @@ export const BannerPreview = forwardRef<HTMLDivElement, BannerPreviewProps>(
         <p
           style={{
             margin: 0,
+            marginLeft: 2,
             fontWeight: 700,
             fontSize: layout.subFont,
             lineHeight: `${layout.subLine}px`,
