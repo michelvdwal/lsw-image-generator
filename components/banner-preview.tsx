@@ -12,11 +12,19 @@ export type BannerPreviewProps = {
   subheading: string;
 };
 
-/** Letter-spacing for uppercase subheading inside the exported banner only. */
-export const BANNER_CAPS_LETTER_SPACING = "0.4em";
+/** Figma node 8219:21523 — uppercase subheading tracking (4.8px at 20px type). */
+export const BANNER_CAPS_LETTER_SPACING = "4.8px";
 
-/** Letter-spacing for uppercase UI outside the banner (export line, tabs, download). */
-export const PAGE_CAPS_LETTER_SPACING = "0.2em";
+/** Half of `BANNER_CAPS_LETTER_SPACING` — theme tabs, download label, etc. */
+export const PAGE_CAPS_LETTER_SPACING = "2.4px";
+
+/** Figma "Inverted v2" (8219:21520): 64px inset; clamp so tiny export sizes still layout. */
+const BANNER_PAD_TARGET = 64;
+const BANNER_STACK_GAP = 16;
+const HEADLINE_PX = 64;
+const HEADLINE_LINE_PX = 72;
+const SUB_PX = 20;
+const SUB_LINE_PX = 24;
 
 export const BannerPreview = forwardRef<HTMLDivElement, BannerPreviewProps>(
   function BannerPreview(
@@ -24,18 +32,11 @@ export const BannerPreview = forwardRef<HTMLDivElement, BannerPreviewProps>(
     ref,
   ) {
     const colors = bannerThemes[theme];
-    const padX = Math.round(width * 0.09);
-    const padY = Math.round(height * 0.06);
-
-    const headlinePx = Math.max(
-      16,
-      Math.min(
-        Math.round(Math.min(width * 0.09, height * 0.2)),
-        Math.round(height * 0.22),
-      ),
+    const minDim = Math.min(width, height);
+    const pad = Math.min(
+      BANNER_PAD_TARGET,
+      Math.max(8, Math.floor(minDim / 2) - 40),
     );
-    const subPx = Math.max(10, Math.round(headlinePx * 0.28));
-    const gap = Math.round(headlinePx * 0.38);
 
     return (
       <div
@@ -51,10 +52,8 @@ export const BannerPreview = forwardRef<HTMLDivElement, BannerPreviewProps>(
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "flex-start",
-          paddingLeft: padX,
-          paddingRight: padX,
-          paddingTop: padY,
-          paddingBottom: padY,
+          gap: BANNER_STACK_GAP,
+          padding: pad,
           fontFamily: "var(--font-outfit), ui-sans-serif, system-ui, sans-serif",
         }}
       >
@@ -62,9 +61,8 @@ export const BannerPreview = forwardRef<HTMLDivElement, BannerPreviewProps>(
           style={{
             margin: 0,
             fontWeight: 800,
-            fontSize: headlinePx,
-            lineHeight: 1.12,
-            letterSpacing: "-0.02em",
+            fontSize: HEADLINE_PX,
+            lineHeight: `${HEADLINE_LINE_PX}px`,
           }}
         >
           {headline}
@@ -72,10 +70,9 @@ export const BannerPreview = forwardRef<HTMLDivElement, BannerPreviewProps>(
         <p
           style={{
             margin: 0,
-            marginTop: gap,
             fontWeight: 700,
-            fontSize: subPx,
-            lineHeight: 1.25,
+            fontSize: SUB_PX,
+            lineHeight: `${SUB_LINE_PX}px`,
             textTransform: "uppercase",
             letterSpacing: BANNER_CAPS_LETTER_SPACING,
             maxWidth: "100%",
