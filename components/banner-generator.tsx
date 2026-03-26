@@ -328,37 +328,7 @@ export function BannerGenerator() {
             <h3 className={`mb-2 ${sectionTitleClass}`} style={{ color: LSW }}>
               Size
             </h3>
-            <p className={`mb-2 ${labelClass}`} style={{ color: LABELMuted }}>
-              Presets
-            </p>
-            <div className="flex flex-col gap-2">
-              {BANNER_PRESETS.map((p) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => applyPreset(p)}
-                  className={`cursor-pointer rounded-[4px] border px-3 py-2 text-left text-base font-normal leading-normal transition-colors ${
-                    presetId === p.id
-                      ? "border-[#27348B] bg-[#27348B]/5 text-[#27348B]"
-                      : "border-zinc-200 bg-white text-[#27348B] hover:border-zinc-300"
-                  }`}
-                >
-                  {p.label}
-                </button>
-              ))}
-              <button
-                type="button"
-                onClick={clearPreset}
-                className={`cursor-pointer rounded-[4px] border px-3 py-2 text-left text-base font-normal leading-normal transition-colors ${
-                  presetId === CLEAR_PRESET_ID
-                    ? "border-[#27348B] bg-[#27348B]/5 text-[#27348B]"
-                    : "border-zinc-200 bg-white text-[#27348B] hover:border-zinc-300"
-                }`}
-              >
-                No preset
-              </button>
-            </div>
-            <div className="mt-3 grid grid-cols-2 gap-3">
+            <div className="mb-4 grid grid-cols-2 gap-3">
               <label className={labelClass} style={{ color: LABELMuted }}>
                 Width (px)
                 <input
@@ -379,6 +349,36 @@ export function BannerGenerator() {
                   className={fieldClass}
                 />
               </label>
+            </div>
+            <p className={`mb-2 ${labelClass}`} style={{ color: LABELMuted }}>
+              Presets
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {BANNER_PRESETS.map((p) => (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => applyPreset(p)}
+                  className={`cursor-pointer rounded-full border px-3 py-1.5 text-left text-sm font-normal leading-normal text-[#27348B] transition-colors ${
+                    presetId === p.id
+                      ? "border-[#27348B] bg-[#27348B]/10 font-semibold"
+                      : "border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50"
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={clearPreset}
+                className={`cursor-pointer rounded-full border px-3 py-1.5 text-left text-sm font-normal leading-normal text-[#27348B] transition-colors ${
+                  presetId === CLEAR_PRESET_ID
+                    ? "border-[#27348B] bg-[#27348B]/10 font-semibold"
+                    : "border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50"
+                }`}
+              >
+                No preset
+              </button>
             </div>
             <p className="mt-2 text-base font-normal leading-normal" style={{ color: LSW }}>
               {aspectLock
