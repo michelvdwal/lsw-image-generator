@@ -252,7 +252,8 @@ export function BannerGenerator() {
   const fieldClass =
     "mt-1 w-full rounded-[4px] border border-zinc-200 px-4 py-3 text-base font-normal leading-normal text-[#27348B]";
 
-  const sectionTitleClass = "text-base font-bold leading-normal";
+  const sectionTitleClass =
+    "font-sans text-lg font-bold leading-normal sm:text-xl";
   const labelClass = "text-xs font-bold leading-normal";
 
   return (
@@ -387,10 +388,7 @@ export function BannerGenerator() {
 
       <section className="rounded-[4px] border border-[#DDE2EA] bg-white p-4 sm:p-6">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h3
-            className="font-sans text-lg font-bold leading-normal sm:text-xl"
-            style={{ color: LSW }}
-          >
+          <h3 className={sectionTitleClass} style={{ color: LSW }}>
             Preview
           </h3>
           <div
