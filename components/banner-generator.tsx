@@ -268,77 +268,6 @@ export function BannerGenerator() {
         />
       </header>
 
-      <section className="rounded-[4px] border border-[#DDE2EA] bg-white p-4 sm:p-6">
-        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h3
-            className="font-sans text-lg font-bold leading-normal sm:text-xl"
-            style={{ color: LSW }}
-          >
-            Preview
-          </h3>
-          <div
-            className="flex w-full overflow-hidden rounded-[4px] border border-zinc-200 sm:w-auto sm:shrink-0"
-            role="tablist"
-            aria-label="Preview theme"
-          >
-            {(Object.keys(bannerThemes) as BannerThemeId[]).map((id, i) => (
-              <button
-                key={id}
-                type="button"
-                role="tab"
-                aria-selected={theme === id}
-                onClick={() => setTheme(id)}
-                className={`min-w-0 flex-1 px-3 py-2 text-center text-xs font-bold uppercase leading-normal transition-colors sm:flex-none sm:px-4 sm:text-sm ${
-                  theme === id
-                    ? "relative z-[1] border-[#BFE2FF] bg-[#E3F2FF] text-[#0084F2]"
-                    : i > 0
-                      ? "border-l border-zinc-200 bg-white text-[#27348B] hover:bg-zinc-50"
-                      : "bg-white text-[#27348B] hover:bg-zinc-50"
-                }`}
-                style={{ letterSpacing: PAGE_CAPS_LETTER_SPACING }}
-              >
-                {bannerThemes[id].label}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="flex min-h-[320px] w-full items-center justify-center overflow-hidden">
-          <div
-            style={{
-              width: width * previewScale,
-              height: height * previewScale,
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                width,
-                height,
-                transform: `scale(${previewScale})`,
-                transformOrigin: "top left",
-              }}
-            >
-              <BannerPreview
-                ref={captureRef}
-                width={width}
-                height={height}
-                theme={theme}
-                headline={headline}
-                subheading={subheading}
-                ratioLayoutRef={ratioLayoutRef}
-                ratioLayoutDesign={ratioLayoutDesign}
-              />
-            </div>
-          </div>
-        </div>
-        <p
-          className={`mt-2 text-center ${labelClass}`}
-          style={{ color: LABELMuted }}
-        >
-          Export size: {width}×{height}px (Outfit 800 / 700)
-        </p>
-      </section>
-
       <section className="flex flex-col gap-6 rounded-[4px] border border-[#DDE2EA] bg-white p-4 sm:p-6">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
           <div className="min-w-0">
@@ -454,6 +383,77 @@ export function BannerGenerator() {
             </button>
           </div>
         </div>
+      </section>
+
+      <section className="rounded-[4px] border border-[#DDE2EA] bg-white p-4 sm:p-6">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h3
+            className="font-sans text-lg font-bold leading-normal sm:text-xl"
+            style={{ color: LSW }}
+          >
+            Preview
+          </h3>
+          <div
+            className="flex w-full overflow-hidden rounded-[4px] border border-zinc-200 sm:w-auto sm:shrink-0"
+            role="tablist"
+            aria-label="Preview theme"
+          >
+            {(Object.keys(bannerThemes) as BannerThemeId[]).map((id, i) => (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                aria-selected={theme === id}
+                onClick={() => setTheme(id)}
+                className={`min-w-0 flex-1 px-3 py-2 text-center text-xs font-bold uppercase leading-normal transition-colors sm:flex-none sm:px-4 sm:text-sm ${
+                  theme === id
+                    ? "relative z-[1] border-[#BFE2FF] bg-[#E3F2FF] text-[#0084F2]"
+                    : i > 0
+                      ? "border-l border-zinc-200 bg-white text-[#27348B] hover:bg-zinc-50"
+                      : "bg-white text-[#27348B] hover:bg-zinc-50"
+                }`}
+                style={{ letterSpacing: PAGE_CAPS_LETTER_SPACING }}
+              >
+                {bannerThemes[id].label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="flex min-h-[320px] w-full items-center justify-center overflow-hidden">
+          <div
+            style={{
+              width: width * previewScale,
+              height: height * previewScale,
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                width,
+                height,
+                transform: `scale(${previewScale})`,
+                transformOrigin: "top left",
+              }}
+            >
+              <BannerPreview
+                ref={captureRef}
+                width={width}
+                height={height}
+                theme={theme}
+                headline={headline}
+                subheading={subheading}
+                ratioLayoutRef={ratioLayoutRef}
+                ratioLayoutDesign={ratioLayoutDesign}
+              />
+            </div>
+          </div>
+        </div>
+        <p
+          className={`mt-2 text-center ${labelClass}`}
+          style={{ color: LABELMuted }}
+        >
+          Export size: {width}×{height}px (Outfit 800 / 700)
+        </p>
       </section>
     </div>
   );
